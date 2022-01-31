@@ -369,6 +369,9 @@ class _EpubViewState extends State<EpubView> {
             ).merge(Style.fromTextStyle(widget.textStyle)),
           },
           customRender: {
+            'p': (context, child) {
+              SelectableText(context.tree.element!.text);
+            },
             'img': (context, child) {
               final url = context.tree.element!.attributes['src']!
                   .replaceAll('../', '');
