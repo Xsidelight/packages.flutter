@@ -361,13 +361,6 @@ class _EpubViewState extends State<EpubView> {
           _buildDivider(_chapters[chapterIndex]),
         Html(
           data: _paragraphs[index].element.outerHtml,
-          // onLinkTap: (href, _, __, ___) =>
-          //     _onLinkPressed(href!, widget.onExternalLinkPressed),
-          // style: {
-          //   'html': Style(
-          //     padding: widget.paragraphPadding as EdgeInsets?,
-          //   ).merge(Style.fromTextStyle(widget.textStyle)),
-          // },
           customRender: {
             'img': (context, child) {
               final url = context.tree.element!.attributes['src']!
@@ -379,7 +372,20 @@ class _EpubViewState extends State<EpubView> {
                 ),
               );
             },
-            'p': (context, child) => SelectableHtml(
+            'p': (context, child) {
+              if (context.tree.element!
+                  .getElementsByTagName('img')
+                  .isNotEmpty) {
+                final url = context.tree.element!.firstChild!.attributes['src']!
+                    .replaceAll('../', '');
+                return Image(
+                  image: MemoryImage(
+                    Uint8List.fromList(widget
+                        .controller._document!.Content!.Images![url]!.Content!),
+                  ),
+                );
+              }
+              return SelectableHtml(
                 data: _paragraphs[index].element.outerHtml,
                 onLinkTap: (href, _, __, ___) =>
                     _onLinkPressed(href!, widget.onExternalLinkPressed),
@@ -388,7 +394,8 @@ class _EpubViewState extends State<EpubView> {
                     padding: widget.paragraphPadding as EdgeInsets?,
                   ).merge(Style.fromTextStyle(widget.textStyle)),
                 },
-              )
+              );
+            }
           },
         ),
       ],
