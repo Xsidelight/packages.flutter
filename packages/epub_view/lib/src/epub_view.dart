@@ -359,6 +359,16 @@ class _EpubViewState extends State<EpubView> {
         if (chapterIndex >= 0 &&
             _getParagraphIndexBy(positionIndex: index) == 0)
           _buildDivider(_chapters[chapterIndex]),
+        SelectableHtml(
+          data: _paragraphs[index].element.outerHtml,
+          onLinkTap: (href, _, __, ___) =>
+              _onLinkPressed(href!, widget.onExternalLinkPressed),
+          style: {
+            'html': Style(
+              padding: widget.paragraphPadding as EdgeInsets?,
+            ).merge(Style.fromTextStyle(widget.textStyle)),
+          },
+        ),
         Html(
           data: _paragraphs[index].element.outerHtml,
           onLinkTap: (href, _, __, ___) =>
@@ -369,7 +379,6 @@ class _EpubViewState extends State<EpubView> {
             ).merge(Style.fromTextStyle(widget.textStyle)),
           },
           customRender: {
-            'p': (context, child) => SelectableText(context.tree.element!.text),
             'img': (context, child) {
               final url = context.tree.element!.attributes['src']!
                   .replaceAll('../', '');
