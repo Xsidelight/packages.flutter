@@ -359,25 +359,15 @@ class _EpubViewState extends State<EpubView> {
         if (chapterIndex >= 0 &&
             _getParagraphIndexBy(positionIndex: index) == 0)
           _buildDivider(_chapters[chapterIndex]),
-        SelectableHtml(
-          data: _paragraphs[index].element.outerHtml,
-          onLinkTap: (href, _, __, ___) =>
-              _onLinkPressed(href!, widget.onExternalLinkPressed),
-          style: {
-            'html': Style(
-              padding: widget.paragraphPadding as EdgeInsets?,
-            ).merge(Style.fromTextStyle(widget.textStyle)),
-          },
-        ),
         Html(
           data: _paragraphs[index].element.outerHtml,
-          onLinkTap: (href, _, __, ___) =>
-              _onLinkPressed(href!, widget.onExternalLinkPressed),
-          style: {
-            'html': Style(
-              padding: widget.paragraphPadding as EdgeInsets?,
-            ).merge(Style.fromTextStyle(widget.textStyle)),
-          },
+          // onLinkTap: (href, _, __, ___) =>
+          //     _onLinkPressed(href!, widget.onExternalLinkPressed),
+          // style: {
+          //   'html': Style(
+          //     padding: widget.paragraphPadding as EdgeInsets?,
+          //   ).merge(Style.fromTextStyle(widget.textStyle)),
+          // },
           customRender: {
             'img': (context, child) {
               final url = context.tree.element!.attributes['src']!
@@ -388,7 +378,17 @@ class _EpubViewState extends State<EpubView> {
                       .controller._document!.Content!.Images![url]!.Content!),
                 ),
               );
-            }
+            },
+            'p': (context, child) => SelectableHtml(
+                data: _paragraphs[index].element.outerHtml,
+                onLinkTap: (href, _, __, ___) =>
+                    _onLinkPressed(href!, widget.onExternalLinkPressed),
+                style: {
+                  'html': Style(
+                    padding: widget.paragraphPadding as EdgeInsets?,
+                  ).merge(Style.fromTextStyle(widget.textStyle)),
+                },
+              )
           },
         ),
       ],
