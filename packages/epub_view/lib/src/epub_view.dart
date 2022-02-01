@@ -376,7 +376,8 @@ class _EpubViewState extends State<EpubView> {
               if (context.tree.element!
                   .getElementsByTagName('img')
                   .isNotEmpty) {
-                final url = context.tree.element!.firstChild!.attributes['src']!
+                final url = context.tree.element!
+                  .getElementsByTagName('img').first.attributes['src']!
                     .replaceAll('../', '');
                 return Image(
                   image: MemoryImage(
